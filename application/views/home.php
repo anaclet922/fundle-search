@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
     <div class="row align-items-center" style="height: 85%">
         <div class="col-8 mx-auto">
-            <h1 class="text-center">Fundle search</h1>
+            <h1 class="text-center"><span style="color: #FC930A; font-weight: bold;">F</span>undle search</h1>
             <h6 class="text-center" style="" id="search-title">
               <!-- WHAT ARE YOU LOOKING FOR? -->
               <b>What are you looking for?</b>
@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <p style="padding: 10px" class="history-words">
 
                 <?php foreach ($history as $key) { ?>
-                  <span class="suggests">
+                  <span class="suggests shadow-sm">
                     <?= $key['word'] ?>
                 </span>
                 <?php } ?>
@@ -65,6 +65,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   }
   .result-item .result-link{
     font-size: 20px;
+    color: #c7750a;
   }
   .result-item .description-text{
     font-size: 14px;
@@ -116,13 +117,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    color:#303841;
+    color:#FC930A;
     text-decoration:none;
   }
 
 
   .suggests{
-    background-color: #A7AAAE;
+    background-color: #FC930A;
     padding: 3px;
     padding-left: 10px;
     padding-right: 10px;
@@ -130,6 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     margin-left: 5px;
     margin-right: 5px;
     font-size: 14px;
+    color: white;
   }
   .signin-me{
     font-size: 12px;
