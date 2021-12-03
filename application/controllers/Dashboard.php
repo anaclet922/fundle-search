@@ -47,15 +47,22 @@ class Dashboard extends CI_Controller {
 
 	public function home(){
 
+		if(null == $this->session->user){
+			redirect('dashboard');
+		}
+
 		$counts = $this->GetContents('counts');
 		$queries = $this->GetContents('queries');
 		$clicks = $this->GetContents('clicks');
 
-		// echo '<pre>';print_r(json_decode($counts, true));
 
-		$this->load->view('header');
-		$this->load->view('dashboard');
-		$this->load->view('footer');
+		$data['queries'] = json_decode($queries, true);
+		$data['counts'] = json_decode($counts, true);
+		$data['clicks'] = json_decode($clicks, true);
+
+		// $this->load->view('header');
+		$this->load->view('dashboard', $data);
+		// $this->load->view('footer');
 	}
 
 	function GetContents($t){
