@@ -46,9 +46,30 @@ class Dashboard extends CI_Controller {
 	}
 
 	public function home(){
+
+		$counts = $this->GetContents('counts');
+		$queries = $this->GetContents('queries');
+		$clicks = $this->GetContents('clicks');
+
+		// echo '<pre>';print_r(json_decode($counts, true));
+
 		$this->load->view('header');
 		$this->load->view('dashboard');
 		$this->load->view('footer');
+	}
+
+	function GetContents($t){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://fundle-90b183.ent.us-central1.gcp.cloud.es.io/api/as/v1/engines/fundle-search-engine/analytics/" . $t);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		    'Content-Type: application/json',
+			'Authorization: Bearer private-7bw32q2ncuz4trj15f8ysoky'
+		));
+        $output = curl_exec($ch);
+        curl_close($ch); 
+
+        return $output;
 	}
 
 

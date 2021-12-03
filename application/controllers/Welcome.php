@@ -20,8 +20,29 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
+		$this->db->order_by('id', 'DESC');
+		$this->db->limit(3);
+
+		$data['history'] = $this->db->get('tbl_keywords')->result_array();
+
 		$this->load->view('header');
-		$this->load->view('home');
+		$this->load->view('home', $data);
 		$this->load->view('footer');
+	}
+
+	public function save_search(){
+		$post = file_get_contents('php://input');
+		$post_array = json_decode($post, true);
+
+		$data = array(
+			'word' => $post_array['query']
+		);
+		$this->db->insert('tbl_keywords', $data);
+		echo 'ok';
+	}
+
+	public function sign_out(){
+		$this->session->sess_destroy();
+		redirect('/');
 	}
 }

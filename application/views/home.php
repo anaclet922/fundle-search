@@ -1,12 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+// echo '<pre>';print_r($this->session->user != null);
 ?>
 <div class="container h-100">
     <div class="row">
       <div class="col-md-12 signin-me text-center">
          <br>
-         <a class="" href="<?= base_url('dashboard') ?>"><i class="fas fa-user"></i> Sign in</a>
-         <a class="" href="#"><i class="fas fa-user-plus"></i> Sign up</a>
+        <?php if(null == $this->session->user){ ?>
+          <a class="" href="<?= base_url('dashboard') ?>"><i class="fas fa-user"></i> Sign in</a>
+          <a class="" href="#"><i class="fas fa-user-plus"></i> Sign up</a>
+        <?php }else{ ?>
+          <?= $this->session->user[0]['full_names'] ?> 
+          <a class="" href="<?= base_url('welcome/sign_out') ?>"><i class="fas fa-user-plus"></i> Sign out</a>
+        <?php } ?>
+
          <br>
          <br>
       </div>
@@ -26,28 +33,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
 
 
-            <p style="padding: 10px">
+            <p style="padding: 10px" class="history-words">
 
-               <span class="suggests">
-                  Bank account 
-                  <!-- <i class="fas fa-times"></i> -->
+                <?php foreach ($history as $key) { ?>
+                  <span class="suggests">
+                    <?= $key['word'] ?>
                 </span>
-
-                <span class="suggests">
-                  Loan rates
-                  <!-- <i class="fas fa-times"></i> -->
-                </span>
-
-                <span class="suggests">
-                  Fintech
-                  <!-- <i class="fas fa-times"></i> -->
-                </span>
-
-                <span class="suggests">
-                  MoMo
-                  <!-- <i class="fas fa-times"></i> -->
-                </span>
-
+                <?php } ?>
             </p>
 
             <p id="search-result-summary" style="font-size: 13px"></p>
@@ -139,6 +131,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     margin-right: 5px;
     font-size: 14px;
   }
+  .signin-me{
+    font-size: 12px;
+  }
   .signin-me a{
     margin: 10px;
     color: #303841;
@@ -172,8 +167,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       $(document).on('keypress',function(e) {
         if(e.which == 13) {
             if($('#search-input').val().trim() != ''){
-              FetchResults();
-            }
+              FetchResults();            }
         }
       });
 
@@ -218,6 +212,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     '</div><br/>';
       }
       $('#results-container').html(output);
+      SaveHistory();
     }else{
       $('#search-result-summary').html('Oops no search result for <b>'+ $('#search-input').val() +'</b> - '+ result.meta.page.total_results +' results');
     }
@@ -238,6 +233,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     DisplayResult(content);
 
+  }
+
+  async function SaveHistory(){
+    const rawResponse = await fetch('<?= base_url() ?>welcome/save_search', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({"query": $('#search-input').val()})
+    });
+    const content = await rawResponse;
+
+    console.log('search saved');
   }
 
 </script>
